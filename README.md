@@ -104,3 +104,16 @@ To scale this microservice across ~10,000 users, ~1,000 services, and ~6,000 API
 
 ---
 
+### 🔄 Scalability Strategy
+
+To scale this job scheduler for high throughput (~10,000 users and ~6,000 API calls/minute):
+
+- **Stateless API Layer**: FastAPI service can run in multiple instances behind a load balancer (e.g., Nginx).
+- **Background Workers**: Use Celery/RQ for async job handling in production.
+- **Distributed Job Store**: Use PostgreSQL or Redis for multi-instance support.
+- **Job Queueing**: APScheduler + Redis for shared job queue across services.
+- **Monitoring**: Use Prometheus & Grafana to monitor job runs.
+- **API Gateway**: Protect APIs with rate-limiting & routing using Kong or Traefik.
+
+---
+
