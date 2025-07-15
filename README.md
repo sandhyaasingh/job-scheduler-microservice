@@ -85,7 +85,7 @@ json
 ```
 ---
 
-## 🌍 Scaling Strategy (For Brownie Points 🌟)
+## 🌍 Scaling Strategy
 
 To scale this microservice across ~10,000 users, ~1,000 services, and ~6,000 API requests/minute, we recommend:
 
