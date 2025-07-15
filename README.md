@@ -85,35 +85,30 @@ json
 ```
 ---
 
-## 🌍 Scaling Strategy
+## 🌍 Scalability Strategy
 
-To scale this microservice across ~10,000 users, ~1,000 services, and ~6,000 API requests/minute, we recommend:
+To scale this job scheduler for high throughput (~10,000 users, ~1,000 services, and ~6,000 API requests per minute), we recommend:
 
-### ✅ Horizontal Scalability
-- Containerize with Docker and deploy multiple instances behind a load balancer (e.g., Kubernetes + NGINX or AWS ALB)
-- Use Redis or a distributed store to coordinate scheduled jobs across instances (e.g., APScheduler + RedisJobStore)
+### ✅ Horizontal Scaling
+- **Stateless API Layer**: Run multiple FastAPI instances behind a load balancer (e.g., Kubernetes + NGINX or AWS ALB).
+- **Containerization**: Use Docker and orchestrate with Kubernetes for global deployment.
 
 ### ✅ Background Processing
-- Offload job execution to background workers (e.g., Celery + Redis/RabbitMQ)
-- Use task queues to handle job spikes and retries gracefully
+- **Job Workers**: Offload execution to Celery or RQ workers using Redis or RabbitMQ.
+- **Task Queues**: Handle spikes, retries, and scheduled tasks cleanly with distributed queues.
+
+### ✅ Distributed Scheduling
+- **APScheduler with RedisJobStore**: Coordinate jobs across instances without duplication.
+- **Centralized Scheduler**: Use a master-worker model to avoid conflicts in job execution.
 
 ### ✅ Database & Performance
-- Switch from SQLite to PostgreSQL for production
-- Use indexes on job.id and next_run for efficient querying
-- Add async support with `databases` or `async SQLAlchemy` for high I/O workloads
+- **Production Database**: Switch from SQLite to PostgreSQL or Redis.
+- **Optimized Queries**: Index job IDs and `next_run` fields for faster lookups.
+- **Async Support**: Use `async SQLAlchemy` or `databases` library for non-blocking DB access.
 
----
-
-### 🔄 Scalability Strategy
-
-To scale this job scheduler for high throughput (~10,000 users and ~6,000 API calls/minute):
-
-- **Stateless API Layer**: FastAPI service can run in multiple instances behind a load balancer (e.g., Nginx).
-- **Background Workers**: Use Celery/RQ for async job handling in production.
-- **Distributed Job Store**: Use PostgreSQL or Redis for multi-instance support.
-- **Job Queueing**: APScheduler + Redis for shared job queue across services.
-- **Monitoring**: Use Prometheus & Grafana to monitor job runs.
-- **API Gateway**: Protect APIs with rate-limiting & routing using Kong or Traefik.
+### ✅ API Management & Monitoring
+- **API Gateway**: Protect and manage traffic with Kong or Traefik.
+- **Monitoring**: Track metrics using Prometheus & Grafana for job status and system health.
 
 ---
 
